@@ -7,7 +7,7 @@ def max_norm(M):
 def cond(M):
 	M_inv = np.linalg.inv(M)
 	M_norm = max_norm(M)
-	M_inv_norm = max_norm(M)
+	M_inv_norm = max_norm(M_inv)
 	condition_num = M_norm * M_inv_norm
 	return condition_num
 

@@ -43,14 +43,14 @@ if lu_solve(M,b).all() == np.linalg.solve(M, b).all():
 	print(lu_solve(M,b))
 	print(np.linalg.solve(M, b))
 else:
-	print("I have a bad feeling about this")
+	print("I have a bad feeling about this, something is wrong")
 
 
 print("\nAnswer d1:")
 
 for i in omega:
 	a = solve_alpha(i, E, S, z)
-	print("\nAnswer to d1.1")
+	print("\nAnswer to d1.1"4)
 	print(f"alpha(omega) of omega {i}")
 	print(a)
 
