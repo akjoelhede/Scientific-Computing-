@@ -50,7 +50,7 @@ print("\nAnswer d1:")
 
 for i in omega:
 	a = solve_alpha(i, E, S, z)
-	print("\nAnswer to d1.1"4)
+	print("\nAnswer to d1.1")
 	print(f"alpha(omega) of omega {i}")
 	print(a)
 
