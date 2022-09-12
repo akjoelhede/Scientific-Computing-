@@ -75,3 +75,4 @@ plt.plot(e1_interval,alpha_e1)
 plt.xlabel("Omega")
 plt.ylabel("Alpha(omega)")
 plt.savefig("e1.pdf")
+

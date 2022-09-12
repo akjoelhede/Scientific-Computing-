@@ -20,13 +20,13 @@ def error_bound(E, S, omega):
 
 def lu_factorize(M):
     
-    #Get the number of rows
+    #Get the number of rows 
 	n = M.shape[0]
     
 	U = M.copy()
 	L = np.eye(n)
     
-    #Loop over rows
+    #Loop over the rows 
 	for i in range(n):
             
         #Eliminate entries below i with row operations 
