@@ -70,3 +70,32 @@ def solve_alpha(omega, E, S, z):
 	alpha = z.dot(x)
 
 	return alpha 
+
+def make_householder(a):
+    #find prependicular vector to mirror
+    u = a / (a[0] + np.copysign(np.linalg.norm(a), a[0]))
+    u[0] = 1
+    H = np.eye(a.shape[0])
+    #finding Householder projection
+    H -= (2 / np.dot(u, u)) * np.outer(u,u)
+    return H
+
+def qr_factorize(A):
+    m, n = A.shape # Divide shape of M into m,n
+    Q = np.eye(m) # make an identity matrix that the m big on each side
+    for i in range(n - (m == n)):
+        H = np.eye(m)
+        #calculate Householder matrix i: rows and i: columns from A i: rows and ith column
+        H[i:, i:] = make_householder(A[i:, i])
+        Q = Q@H
+        A = H@A
+    return Q, A
+ 
+def least_squares(A, b):
+    m, n = A.shape
+    Q, R = qr_factorize(A)
+    b2 = Q.T@b
+    x = back_substitution(R[:n], b2[:n])
+
+    return x
+

@@ -3,6 +3,7 @@
 # and i figured that i would use that to since the code will be much nicer to look at
 from watermatrices import Amat, Bmat, yvec, Imat
 from subroutines import *
+from HHexamples import *
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -75,4 +76,40 @@ plt.plot(e1_interval,alpha_e1)
 plt.xlabel("Omega")
 plt.ylabel("Alpha(omega)")
 plt.savefig("e1.pdf")
+print("\n")
 
+#Week 2 
+
+#F1
+#Check that QR decomposition works
+
+print("\n Answer to F")
+Q, R = qr_factorize(A2)
+
+identity_check = Q.T@Q
+R_check = Q@R
+
+print(identity_check)
+print("\n")
+print(R_check)
+
+x = least_squares(A2,b2)
+
+print("\n Slow Householder QR decomposition on matrix A2")
+print(f'Resulting R matrix: R= \n {R}')
+print("\n Least Squares method on matrix A2 and vector b2")
+print(f'linear least square fit: x={x}')
+
+
+#F2
+
+
+#F3
+
+
+
+#G
+
+
+157
+163
