@@ -99,3 +99,18 @@ def least_squares(A, b):
 
     return x
 
+def least_squares_P(x, y, n):
+    # We run the sum from j=0 to n, so we have n+1 terms, and n+1 parameters
+    # (and n+1 columns in our matrix)
+    m = x.size
+
+    # Now we just create our matrix and solve the least squares problem
+    A = np.zeros((m, n+1))
+    for j in range(n+1):
+        A[:, j] = x**(2*j)
+    res = least_squares(A, y)
+
+    P = np.zeros(x.shape)
+    for j in range(n+1):
+        P = P + res[j] * x**(2*j)
+    return res, P
