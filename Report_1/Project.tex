@@ -1,0 +1,112 @@
+\documentclass[a4paper,12pkt]{report}
+\usepackage[utf8]{inputenc} %Specialtegn
+\usepackage{amsmath} %Matricer og Mat symboler
+\usepackage{graphicx} %Billeder og Figurer
+\usepackage{setspace} %Mellemrum mellem linjer og paragraffer
+\usepackage{amssymb} %Mat symboler
+\usepackage[danish]{babel} %Stavekontrol
+\usepackage{fancyhdr} %Headers
+\usepackage{csquotes} %Citeringer over flere dokumenter
+\usepackage[a4paper, total={6in, 8in}]{geometry} %Bredere Marginer
+\usepackage[backend=biber]{biblatex} %Gør det muligt at have litteraturliste med flere subfiles
+\addbibresource{Litteratur.bib} %Litteraturliste
+\bibliography{Litteratur.bib} %Litteraturliste
+\usepackage[colorlinks]{hyperref} %Hyperlinks i PDF
+\title{Scienfic Computing Project 1 }
+\author{Anders Kjølhede}
+\date{September 2022}
+
+\begin{document}
+
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{Scienfic Computing}
+\lhead{nr.1}
+\rfoot{side \thepage}
+
+\maketitle
+
+\onehalfspacing %Linjeafstand
+\setlength{\jot}{10pt} %Mellemrum ved ligninger
+
+\section*{Background Theory}
+
+The polarizability for a given frequency $\omega$ is obtained as a scalar product of two vectors \textbf{z} and \textbf{x}.
+
+\begin{equation}
+    \alpha(\omega) = z^Tx
+\end{equation}
+
+\textbf{z} is obtained from the schrödinger equation and \textbf{x} is the solution to the following system of linear equation:
+
+\begin{equation}
+    (E-\omega S)x = z
+\end{equation}
+
+E and S are square matrices and $\omega$ is the frequency of the incoming light. E, S and z are visualized as follows:
+
+\begin{equation}
+    E = \begin{bmatrix}
+        A & B \\
+        B & A
+    \end{bmatrix}
+    \hspace{1cm}
+    S = \begin{bmatrix}
+        I & 0 \\
+        0 & -I
+    \end{bmatrix}
+    \hspace{1cm}
+    z = \begin{bmatrix}
+        y \\
+        -y
+    \end{bmatrix}
+\end{equation}
+
+\section*{Question A}
+
+By computing the max-norm and the inverse of the given matrix we can calculate the condition number for the individual frequencies by using the following relation:
+
+\begin{equation}
+    cond_{\infty}(M) = ||M||_{\infty}||M^{-1}||_{\infty}
+\end{equation}
+
+
+
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{l  c  c  c }
+    \hline
+     Frequencies & Condition Number \\ \hline
+     0.800 & 327.8167 \\
+     1.146 & 152679.2687\\
+     1.400 & 227.1944
+    \end{tabular}
+    \caption{}
+    \label{Confusion matrix scores}
+\end{table}
+
+\section*{Question B}
+
+For the three frequencies we can also determine a bound on the relative forward error in the max-norm:
+
+\begin{equation}
+    \frac{||\delta x||_{\infty}}{||\hat{x}||_{\infty}} \leq cond_{\infty}(E-\omega S) \frac{||\delta \omega S||_{\infty}}{||E-\omega S||_{\infty}}
+\end{equation}
+
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{l  c  c  c }
+    \hline
+     Frequencies & Bound \\ \hline
+     0.800 & 0.0052 \\
+     1.146 & 2.4050\\
+     1.400 & 0.0035
+    \end{tabular}
+    \caption{}
+\end{table}
+
+\newpage
+
+\section*{C}
+
+\end{document}

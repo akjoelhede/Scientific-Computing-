@@ -20,7 +20,8 @@ S = np.diag(diag)
 
 omega = np.array([0.800,1.146,1.400])
 domega = 0.5*10**(-3)
-
+z_sig_digits = 0.5*10e-8
+"____________________________________________________________________________"
 
 print("\nAnswer a2:")
 for i in omega:
@@ -28,12 +29,19 @@ for i in omega:
 	Cond_num = cond(M)
 	print(f"Condition number for each omega = {i}")
 	print(Cond_num)
+	print(np.floor(-np.log10(Cond_num*z)))
+
+"____________________________________________________________________________"
+
 
 print("\nAnswer b1:")
 for i in omega:
 	e = error_bound(E, S, i)
 	print(f"Error bound for omega={i}:")
 	print(e)
+	print(np.floor(-np.log10(e)))
+"____________________________________________________________________________"
+
 
 M = np.array([[2, 1, 1], [4, 1, 4], [-6, -5., 3]])
 b = np.array([4, 11, 4.])
@@ -45,6 +53,8 @@ if lu_solve(M,b).all() == np.linalg.solve(M, b).all():
 	print(np.linalg.solve(M, b))
 else:
 	print("I have a bad feeling about this, something is wrong")
+
+"____________________________________________________________________________"
 
 
 print("\nAnswer d1:")
@@ -78,10 +88,13 @@ plt.ylabel("Alpha(omega)")
 plt.savefig("e1.pdf")
 print("\n")
 
+"____________________________________________________________________________"
+
 #Week 2 
 
 #F1
 #Check that QR decomposition works
+"____________________________________________________________________________"
 
 print("\n Answer to F")
 Q, R = qr_factorize(A2)
@@ -92,7 +105,10 @@ R_check = Q@R
 print(identity_check)
 print("\n")
 print(R_check)
+"____________________________________________________________________________"
 
+
+#F3
 x = least_squares(A2,b2)
 
 print("\n Slow Householder QR decomposition on matrix A2")
@@ -100,12 +116,7 @@ print(f'Resulting R matrix: R= \n {R}')
 print("\n Least Squares method on matrix A2 and vector b2")
 print(f'linear least square fit: x={x}')
 
-
-#F2
-
-
-#F3
-
+"____________________________________________________________________________"
 
 
 #G
@@ -122,7 +133,9 @@ for i in range(omega.size):
 x_1, p_1 = least_squares_P(omega, alpha, 4) 
 x_2, p_2 = least_squares_P(omega, alpha, 6)
 
-#print(x_1,x_2)
+print("g parameters")
+print(x_1)
+print(x_2)
 
 #Calculates the relative error 
 rel1 = np.abs((p_1-alpha)/alpha)
@@ -161,6 +174,14 @@ params_1, Q1 = least_squares_Q(omega, alpha, 2)
 params_2, Q2 = least_squares_Q(omega, alpha, 4)
 
 #print(params_1,params_2)
+
+a1 = params_1[:3]
+b1 = params_1[3:]
+a2 = params_2[:5]
+b2 = params_2[5:]
+print("h: parameters")
+print(a1, b1)
+print(a2, b2)
 
 #Calculates the relative error 
 rel1 = np.abs((Q1-alpha)/alpha)
