@@ -110,6 +110,78 @@ print(f'linear least square fit: x={x}')
 
 #G
 
+omega_p = 1.1 # select appropriate Omega_p < 1.5 
+omega = np.linspace(0.7,1.5,1000) #Makes am array of omegas
+omega = omega[omega < omega_p] # Shrink to the omegas thats gonna be in use
+alpha = np.zeros(omega.shape) #constructs an array that has the same size as omega for when solving for alpha
 
-157
-163
+for i in range(omega.size):
+	alpha[i] = solve_alpha(omega[i],E,S,z) # solving alpha for each omega in line 115
+
+#Solves the least squares problem for the given polynomial for both n = 4 & 6 
+x_1, p_1 = least_squares_P(omega, alpha, 4) 
+x_2, p_2 = least_squares_P(omega, alpha, 6)
+
+#print(x_1,x_2)
+
+#Calculates the relative error 
+rel1 = np.abs((p_1-alpha)/alpha)
+rel2 = np.abs((p_2-alpha)/alpha)
+
+#Plot relative wrt. omega in a logarithmic scale
+fig2, (ax2, ax3) = plt.subplots(ncols=2, figsize=(8, 4))
+ax2.plot(omega, rel1, label='n=4')
+ax2.plot(omega, rel2, label='n=6')
+ax2.set_yscale('log')
+ax2.set_xlabel(r'$\omega$')
+ax2.set_ylabel(r'$\log_{10} |(P(\omega) - \alpha(\omega))/\alpha(\omega)|$')
+ax2.legend()
+
+#Utilizes that -log10(relative_error) = sig. digits and then uses np.floor to get an integer
+ax3.plot(omega, np.floor(-np.log10(rel1)), label='n=4')
+ax3.plot(omega, np.floor(-np.log10(rel2)), label='n=6')
+ax3.legend()
+ax3.set_xlabel(r'$\omega$')
+ax3.set_ylabel(r'Number of significant digits of $P(\omega)$')
+fig2.tight_layout()
+fig2.savefig('g.pdf')
+
+"____________________________________________________________________________"
+
+#Solution to h 
+ 
+omega = np.linspace(0.7,1.5,1000) #Makes am array of omegas
+alpha = np.zeros(omega.shape) #constructs an array that has the same size as omega for when solving for alpha
+
+for i in range(omega.size):
+	alpha[i] = solve_alpha(omega[i],E,S,z) # solving alpha for each omega in line 115
+
+#Solves the least squares problem for the given polynomial for both n = 2 & 4 
+params_1, Q1 = least_squares_Q(omega, alpha, 2) 
+params_2, Q2 = least_squares_Q(omega, alpha, 4)
+
+#print(params_1,params_2)
+
+#Calculates the relative error 
+rel1 = np.abs((Q1-alpha)/alpha)
+rel2 = np.abs((Q2-alpha)/alpha)
+
+#Plot relative wrt. omega in a logarithmic scale
+fig2, (ax2, ax3) = plt.subplots(ncols=2, figsize=(8, 4))
+ax2.plot(omega, rel1, label='n=2')
+ax2.plot(omega, rel2, label='n=4')
+ax2.set_yscale('log')
+ax2.set_xlabel(r'$\omega$')
+ax2.set_ylabel(r'$\log_{10} |(P(\omega) - \alpha(\omega))/\alpha(\omega)|$')
+ax2.legend()
+
+#Utilizes that -log10(relative_error) = sig. digits and then uses np.floor to get an integer
+ax3.plot(omega, np.floor(-np.log10(rel1)), label='n=2')
+ax3.plot(omega, np.floor(-np.log10(rel2)), label='n=4')
+ax3.legend()
+ax3.set_xlabel(r'$\omega$')
+ax3.set_ylabel(r'Number of significant digits of $Q(\omega)$')
+fig2.tight_layout()
+fig2.savefig('h.pdf')
+
+
