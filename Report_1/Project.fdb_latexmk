@@ -1,12 +1,12 @@
 # Fdb version 3
-["biber Project"] 1663322946 "Project.bcf" "Project.bbl" "Project" 1663323450
+["biber Project"] 1663322946 "Project.bcf" "Project.bbl" "Project" 1663328076
   "Project.bcf" 1663323445 101312 c9799361b6f4e6724cc431d29170e21e "pdflatex"
   (generated)
   "Project.bbl"
   "Project.blg"
-["pdflatex"] 1663323443 "/Users/anderskjolhede/Documents/GitHub/Scientific-Computing-/Report_1/Project.tex" "/Users/anderskjolhede/Documents/GitHub/Scientific-Computing-/Report_1/Project.pdf" "Project" 1663323450
+["pdflatex"] 1663323443 "/Users/anderskjolhede/Documents/GitHub/Scientific-Computing-/Report_1/Project.tex" "/Users/anderskjolhede/Documents/GitHub/Scientific-Computing-/Report_1/Project.pdf" "Project" 1663328076
   "/Users/anderskjolhede/Documents/GitHub/Scientific-Computing-/Report_1/Project.aux" 1663323445 1521 ad0c72d3d2b608624293f2d88eb89d47 ""
-  "/Users/anderskjolhede/Documents/GitHub/Scientific-Computing-/Report_1/Project.tex" 1663323330 2920 f1a557de43f0ed3035da27d2d65713f0 ""
+  "/Users/anderskjolhede/Documents/GitHub/Scientific-Computing-/Report_1/Project.tex" 1663328075 2920 f1a557de43f0ed3035da27d2d65713f0 ""
   "/usr/local/texlive/2020/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2020/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1246382020 1004 54797486969f23fa377b128694d548df ""
   "/usr/local/texlive/2020/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex8.tfm" 1246382020 988 bdf658c3bfc2d96d3c8b02cfc1c94c20 ""
@@ -123,13 +123,13 @@
   "Project.bbl" 1663322967 466 f7f239c736cf01ac6ce7bd829f9b3c7b "biber Project"
   "Project.out" 1663323445 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
   "Project.run.xml" 1663323445 2325 c8409261a1a99f8ea1fef099f34be202 "pdflatex"
-  "Project.tex" 1663323330 2920 f1a557de43f0ed3035da27d2d65713f0 ""
+  "Project.tex" 1663328075 2920 f1a557de43f0ed3035da27d2d65713f0 ""
   (generated)
-  "/Users/anderskjolhede/Documents/GitHub/Scientific-Computing-/Report_1/Project.pdf"
-  "Project.aux"
+  "Project.pdf"
+  "Project.bcf"
+  "/Users/anderskjolhede/Documents/GitHub/Scientific-Computing-/Report_1/Project.log"
   "Project.log"
   "Project.out"
-  "Project.bcf"
-  "Project.pdf"
-  "/Users/anderskjolhede/Documents/GitHub/Scientific-Computing-/Report_1/Project.log"
   "Project.run.xml"
+  "Project.aux"
+  "/Users/anderskjolhede/Documents/GitHub/Scientific-Computing-/Report_1/Project.pdf"
