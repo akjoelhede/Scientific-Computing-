@@ -190,10 +190,8 @@ def least_squares_P(x, y, n):
 def least_squares_Q(x, y, n):
     m = x.size
 
-    # There are 2n+1 parameters: a_j for j=0,...,n and b_j for j=1,...,n
     N = 2*n+1
     b_start = n+1
-    # Build the matrix needed
     A = np.zeros((m, N))
     for j in range(n+1):
         A[:, j] = x**j
