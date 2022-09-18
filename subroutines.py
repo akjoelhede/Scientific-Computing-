@@ -108,6 +108,25 @@ def make_householder(a):
     #finding Householder projection
     H -= (2 / np.dot(u, u)) * np.outer(u,u)
     return H
+"____________________________________________________________________________"
+
+def householder_fast(M):
+	R = M.copy()
+	R = R.astype(float)
+	m,n = R.shape
+	V_store = []
+
+	for i in range(n):
+		a_vector = R[i:m,i]
+		alpha = -np.copysign(a_vector[0],a_vector[0])/np.abs(a_vector[0])*(np.sqrt(np.sum(a_vector**2)))
+		v_vector = a_vector.copy()
+		v_vector[0] = v_vector[0]*alpha
+		v_vector = v_vector/np.sqrt(np.sum(v_vector**2))
+		V_store.append(v_vector)
+		for j in range(i,n):
+			R[i:m,j]=R[i:m,j]-2*np.dot(v_vector,R[i:m,j])*v_vector
+		
+	return R, V_store
 
 "____________________________________________________________________________"
 

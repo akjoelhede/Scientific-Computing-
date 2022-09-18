@@ -1,12 +1,12 @@
 # Fdb version 3
-["biber Project"] 1663322946 "Project.bcf" "Project.bbl" "Project" 1663328076
-  "Project.bcf" 1663323445 101312 c9799361b6f4e6724cc431d29170e21e "pdflatex"
+["biber Project"] 1663530335 "Project.bcf" "Project.bbl" "Project" 1663536128
+  "Project.bcf" 1663533035 101312 c9799361b6f4e6724cc431d29170e21e "pdflatex"
   (generated)
-  "Project.bbl"
   "Project.blg"
-["pdflatex"] 1663323443 "/Users/anderskjolhede/Documents/GitHub/Scientific-Computing-/Report_1/Project.tex" "/Users/anderskjolhede/Documents/GitHub/Scientific-Computing-/Report_1/Project.pdf" "Project" 1663328076
-  "/Users/anderskjolhede/Documents/GitHub/Scientific-Computing-/Report_1/Project.aux" 1663323445 1521 ad0c72d3d2b608624293f2d88eb89d47 ""
-  "/Users/anderskjolhede/Documents/GitHub/Scientific-Computing-/Report_1/Project.tex" 1663328075 2920 f1a557de43f0ed3035da27d2d65713f0 ""
+  "Project.bbl"
+["pdflatex"] 1663533033 "/Users/anderskjolhede/Documents/GitHub/Scientific-Computing-/Report_1/Project.tex" "/Users/anderskjolhede/Documents/GitHub/Scientific-Computing-/Report_1/Project.pdf" "Project" 1663536128
+  "/Users/anderskjolhede/Documents/GitHub/Scientific-Computing-/Report_1/Project.aux" 1663533035 1684 b01e42dae7f85e6e950f90f5ac044b58 ""
+  "/Users/anderskjolhede/Documents/GitHub/Scientific-Computing-/Report_1/Project.tex" 1663536126 7084 2ca8a510a6f54eeab2d2f03599186258 ""
   "/usr/local/texlive/2020/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2020/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1246382020 1004 54797486969f23fa377b128694d548df ""
   "/usr/local/texlive/2020/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex8.tfm" 1246382020 988 bdf658c3bfc2d96d3c8b02cfc1c94c20 ""
@@ -119,17 +119,20 @@
   "/usr/local/texlive/2020/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1586288239 4811913 0be9a7e86c70a26e5e3042966bcd7097 ""
   "/usr/local/texlive/2020/texmf-var/web2c/pdftex/pdflatex.fmt" 1600375687 2432464 37607e9e0d6267a3ff7d6839fd0c614e ""
   "/usr/local/texlive/2020/texmf.cnf" 1586288231 577 d60164b4589a341208aff7a667fbbdcb ""
-  "Project.aux" 1663323445 1521 ad0c72d3d2b608624293f2d88eb89d47 "pdflatex"
-  "Project.bbl" 1663322967 466 f7f239c736cf01ac6ce7bd829f9b3c7b "biber Project"
-  "Project.out" 1663323445 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
-  "Project.run.xml" 1663323445 2325 c8409261a1a99f8ea1fef099f34be202 "pdflatex"
-  "Project.tex" 1663328075 2920 f1a557de43f0ed3035da27d2d65713f0 ""
+  "Project.aux" 1663533035 1684 b01e42dae7f85e6e950f90f5ac044b58 "pdflatex"
+  "Project.bbl" 1663530337 466 f7f239c736cf01ac6ce7bd829f9b3c7b "biber Project"
+  "Project.out" 1663533034 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
+  "Project.run.xml" 1663533035 2325 c8409261a1a99f8ea1fef099f34be202 "pdflatex"
+  "Project.tex" 1663536126 7084 2ca8a510a6f54eeab2d2f03599186258 ""
+  "e1.pdf" 1663324093 11285 e898d14b33b738a1604da2ec346a17a3 ""
+  "g.pdf" 1663502825 23172 e9628be98af9e7216f9d1e1a5135cec0 ""
+  "h.pdf" 1663502827 21895 9a9df8c9dce0210630a9e1f9cc217f1e ""
   (generated)
+  "Project.run.xml"
   "Project.pdf"
   "Project.bcf"
   "/Users/anderskjolhede/Documents/GitHub/Scientific-Computing-/Report_1/Project.log"
-  "Project.log"
   "Project.out"
-  "Project.run.xml"
-  "Project.aux"
+  "Project.log"
   "/Users/anderskjolhede/Documents/GitHub/Scientific-Computing-/Report_1/Project.pdf"
+  "Project.aux"
