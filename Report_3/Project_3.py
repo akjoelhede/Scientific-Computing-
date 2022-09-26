@@ -2,22 +2,46 @@ import numpy as np
 import matplotlib.pyplot as plt
 import sympy as sp
 
-x = sp.symbols('x')
+def f(x):
+	y = x**2-4*np.sin(x)
+	return y
 
-f = x**2-4*sp.sin(x)
 
-fderivative = f.diff(x)
-
-print(fderivative)
-
-def Newton_solver(f, x_0, max_iter):
-
-	x_store = []
+def Newton_solver1(f, x0, h= 5e-2, max_iter=50, tol=1e-3):
+	x = [x0]
 
 	for i in range(max_iter):
-		x_0 = x_0 - float(f.evalf(subs={x:x_0}))  /float(fderivative.evalf(subs={x:x_0}))
-		x_store.append(x_0)
+		fx= f(x[-1])
+		fminus = f(x[-1]-h)
+		fplus  = f(x[-1]+h)
+		diff = (fplus-fx)/h
+		x_new = x[-1]-fx/(diff)
+		x.append(x_new)
+		res = abs((x[-1]-[-2])/[-2])
+		if res <= tol:
+			break
 
-	return x_store
+	return np.array(x)
 
-print(Newton_solver(f, 3, 10))
+print(Newton_solver1(f, 3))
+
+def Bisection(f, a, b, tol = 1e-6):
+
+	a, b = min(a,b), max(a,b)
+
+
+	
+
+
+	while b-a > tol:
+		m = a + (b-a)/ 2
+		fa = f(a)
+		fm = f(m)
+		sfa = fa/abs(fa)
+		fsm = fm/abs(fm)
+		if sfa == fsm:
+			a = m
+		else:
+			b = m
+
+	return m 
