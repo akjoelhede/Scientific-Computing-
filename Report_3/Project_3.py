@@ -30,7 +30,10 @@ def Bisection(f, a, b, tol = 1e-6):
 	a, b = min(a,b), max(a,b)
 
 
-	
+	fa = f(a)
+	fb = f(b)
+	if fa/abs(fa) == fb/abs(fb):
+		return None
 
 
 	while b-a > tol:
@@ -45,3 +48,5 @@ def Bisection(f, a, b, tol = 1e-6):
 			b = m
 
 	return m 
+
+print(Bisection(f, 1, 4))
