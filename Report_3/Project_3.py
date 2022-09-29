@@ -7,72 +7,71 @@ import time
 
 "Q1_____________________________________________________________"
 
-Epsilon = 0.997
-Sigma = 3.401
-A = 4*Epsilon*Sigma**12
-B = 4*Epsilon*Sigma**6
+V_function = LJ(sigma=SIGMA, epsilon=EPSILON)
 
-def potential1D(r, r0=0):
-	V = A/(r-r0)**12 - B/(r-r0)**6
-	return V
+def Pot_two_particles(x):
 
-def potential_total(r, A=A, B=B):
-	if len(r.shape) == 1:
-		r = r.reshape((-1, 3))
-	R2 = pdist(r, metric='sqeuclidean')
-	V = np.sum(A/R2**6 - B/R2**3)
-	return V
+	#Now we define the coordinates for each particle
+	x0 = np.array([x,0,0])
+	x1 = np.array([0,0,0])
 
+	#Calculate the potential 
+	points = np.stack((x0,x1))
+	pot = V_function(points)
 
-r1 = np.linspace(3, 11.0, num=500)
-r0 = 0
-p1 = potential1D(r1, r0)
+	return pot
 
-fig, (ax, ax2) = plt.subplots(nrows=2)
-ax.plot(r1, p1, label='V > 0')
-#ax.plot(r1[p1 < 0], p1[p1 < 0], label='V < 0')
-r2 = np.linspace(3, 5, 100)
-p2 = potential1D(r2, r0)
-ax2.plot(r2, p2, label='V > 0')
-ax2.plot(r2[p2 < 0], p2[p2 < 0], label='V < 0')
-ax.set_xlabel('Distance $r$')
-ax.set_ylabel('Potential $V$')
-ax2.set_xlabel('Distance $r$')
-ax2.set_ylabel('Potential $V$')
-ax.legend()
-ax2.legend()
-ax.set_title('Lennard-Jones potential between two atoms')
-fig.tight_layout()
+def Pot_four_particles(x):
+
+	#Now we define the coordinates for each particle
+	x0 = np.array([x,0,0])
+	x1 = np.array([0,0,0])
+	x2 = np.array([14,0,0])
+	x3 = np.array([7,3.2,0])
+
+	#Calculate the potential 
+	points = np.stack((x0,x1,x2,x3))
+	pot = V_function(points)
+
+	return pot
+
+# Let x range from 3 to 11, and make empty array to store strenght of potential in
+x_arr = np.linspace(3,11,100)
+V2_arr = np.zeros_like(x_arr) 
+V4_arr = np.zeros_like(x_arr) 
+
+# Calculate potential for each x
+for x, i in zip(x_arr, np.arange(len(x_arr))):
+
+	# Two particles
+	potential2 = Pot_two_particles(x) #Calculates pot for each x
+	V2_arr[i] = potential2 # Inserts value into the ith place in the empty pot arrays 
+
+	# Four particles
+	potential4 = Pot_four_particles(x)
+	V4_arr[i] = potential4
+
+# Plot it
+fig, ax = plt.subplots(figsize=(12,6))
+ax.plot(x_arr, V2_arr, 'C0o--', label='Two particles')
+ax.plot(x_arr, V4_arr, 'C1o--', label='Four particles')
+ax.set_xlabel(r'$x$', fontsize=15)
+ax.set_ylabel(r'$V_{LJ}$', fontsize=15)
+ax.set_title('Lennard-Jones Potential', fontsize=18)
+ax.legend(fontsize=15)
 plt.show()
 
 "Q2_____________________________________________________________"
 
-def f(x):
-	y = x**2-4*np.sin(x)
-	return y
-
-def Newton_solver1(f, x0, h= 5e-2, max_iter=50, tol=1e-3):
-	x = [x0]
-
-	for i in range(max_iter):
-		fx= f(x[-1])
-		fminus = f(x[-1]-h)
-		fplus  = f(x[-1]+h)
-		diff = (fplus-fx)/h
-		x_new = x[-1]-fx/(diff)
-		x.append(x_new)
-		res = abs((x[-1]-[-2])/[-2])
-		if res <= tol:
-			break
-
-	return np.array(x)
-
-def Bisection(f, a, b, tol = 1e-6):
+def Bisection(f, a, b, tol = 1e-13):
 	a, b = min(a,b), max(a,b)
 	fa = f(a)
 	fb = f(b)
 	if fa/abs(fa) == fb/abs(fb):
 		return None
+
+	n_calls = 2 
+
 	while b-a > tol:
 		m = a + (b-a)/ 2
 		fa = f(a)
@@ -83,4 +82,110 @@ def Bisection(f, a, b, tol = 1e-6):
 			a = m
 		else:
 			b = m
-	return m
+
+		n_calls += 1
+
+	return m, n_calls
+
+x, n_calls = Bisection(Pot_two_particles, 2, 6)
+
+print(f'The root was found to be {x}, with {n_calls} calls. Sigma is {SIGMA}')
+
+"Q3_____________________________________________________________"
+
+def dPot_two_particles(r):
+	y = 4*EPSILON*((6*SIGMA**6)/r**7 - (12*SIGMA**12)/r**13)
+	return y
+
+def Newton_solver1(f, df, x0, tol=1e-12, max_iter=100):
+	
+	x, n_calls = x0, 0 
+
+	for i in range(max_iter):
+
+		fx = f(x)
+		
+		if abs(fx) < tol:
+
+			n_calls += 1
+			return x, n_calls
+		
+		diff = df(x)
+		x = x - fx/diff
+
+		n_calls += 2
+
+
+	return x, n_calls
+
+x,n_calls = Newton_solver1(Pot_two_particles, dPot_two_particles, 2, tol = 1e-12)
+
+print(f'The root was found to be {x}, with {n_calls} calls. Sigma is {SIGMA}')
+
+"Q4_____________________________________________________________"
+
+def Bisection_step(f, a, b, n_calls):
+
+	m = a + (b-a)/ 2
+	fa = f(a)
+	fm = f(m)
+	sfa = fa/abs(fa)
+	fsm = fm/abs(fm)
+	if sfa == fsm:
+		a = m
+	else:
+		b = m
+
+	n_calls += 2
+
+	return a, b, n_calls
+
+def Newton_Raphson_step(fx, dfx, x0):
+
+	x = x0 - fx/dfx
+
+	return x
+
+def Frankenstein_root_finder(f, df , x0, a, b, tol):
+
+	m = x0
+	fm = f(m)
+	n_calls = 1
+
+	while abs(fm) > tol:
+
+		dfm = df(m)
+		n_calls += 100
+
+		if dfm == 0:
+			a, b, n_calls = Bisection_step(f, a, b, n_calls)
+
+			m = a + (b-a)/2
+		
+		else:
+
+			m = Newton_Raphson_step(fm, dfm, m)
+
+			if m > a and m < b:
+
+				fa = f(a)
+				n_calls += 1 
+
+				sfa = fa/abs(fa)
+				fsm = fm/abs(fm)
+				if sfa == fsm:
+
+					a = m
+
+				else:
+					b = m
+
+			else:
+				a, b, n_calls = Bisection_step(f, a, b, n_calls)
+
+				m = a + (b-a)/2
+
+		fm = f(m)
+		n_calls += 1
+
+	return m, n_calls
