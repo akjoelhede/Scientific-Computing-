@@ -5,7 +5,7 @@ from LJhelperfunctions import *
 import timeit
 import time
 
-"Q1_____________________________________________________________"
+"QA_____________________________________________________________"
 
 V_function = LJ(sigma=SIGMA, epsilon=EPSILON)
 
@@ -61,7 +61,7 @@ ax.set_title('Lennard-Jones Potential', fontsize=18)
 ax.legend(fontsize=15)
 plt.show()
 
-"Q2_____________________________________________________________"
+"QB_____________________________________________________________"
 
 def Bisection(f, a, b, tol = 1e-13):
 	a, b = min(a,b), max(a,b)
@@ -91,7 +91,7 @@ x, n_calls = Bisection(Pot_two_particles, 2, 6)
 
 print(f'The root was found to be {x}, with {n_calls} calls. Sigma is {SIGMA}')
 
-"Q3_____________________________________________________________"
+"QC_____________________________________________________________"
 
 def dPot_two_particles(r):
 	y = 4*EPSILON*((6*SIGMA**6)/r**7 - (12*SIGMA**12)/r**13)
@@ -122,7 +122,7 @@ x,n_calls = Newton_solver1(Pot_two_particles, dPot_two_particles, 2, tol = 1e-12
 
 print(f'The root was found to be {x}, with {n_calls} calls. Sigma is {SIGMA}')
 
-"Q4_____________________________________________________________"
+"QD_____________________________________________________________"
 
 def Bisection_step(f, a, b, n_calls):
 
@@ -189,3 +189,153 @@ def Frankenstein_root_finder(f, df , x0, a, b, tol):
 		n_calls += 1
 
 	return m, n_calls
+
+# Test it
+x, n_calls = Frankenstein_root_finder(Pot_two_particles, dPot_two_particles, 2, 2, 6, tol=1e-13)
+
+# Print results
+print(f'The root was found to be {x} with {n_calls} calls. Sigma is {SIGMA}')
+
+
+"QE_____________________________________________________________"
+
+#Get the gradient potential function with the experimental values of argon
+gradient_pot_func = LJgradient(sigma =SIGMA, epsilon = EPSILON)
+
+
+#As before, define a function that calculates the gradient potential for two particles
+def Gradient_pot_twoparticles(x):
+
+	x0 = np.array([x,0,0])
+	x1 = np.array([0,0,0])
+
+	points = np.stack((x0,x1))
+	gradient_pot = gradient_pot_func(points)
+
+	return gradient_pot
+
+
+x_arr = np.linspace(3,10,1000) #x is in the interval [3:10]
+
+#Create empty arrays for the gradient in all directions
+gradx_arr = np.zeros_like(x_arr)
+grady_arr = np.zeros_like(x_arr)
+gradz_arr = np.zeros_like(x_arr)
+
+for x, i in zip(x_arr, np.arange(len(x_arr))): 
+
+	grad = Gradient_pot_twoparticles(x)
+
+	if i == 0:
+        	print(grad)
+	
+	gradx_arr[i], grady_arr[i], gradz_arr[i] = grad[0]
+
+
+# Potenial needs to be in the same interval
+pot_arr = np.zeros_like(x_arr) 
+
+# Calculate potential for each x
+for x, i in zip(x_arr, np.arange(len(x_arr))):
+	potential = Pot_two_particles(x)
+	pot_arr[i] = potential
+
+# Plot the nonzero component for x0
+fig, ax = plt.subplots(figsize=(8,6))
+
+# Plot the gradient
+ax.plot(x_arr, gradx_arr, '-', label='Gradient')
+
+# Plot the potential 
+ax.plot(x_arr,pot_arr,'-',label='LJ Potential')
+ax.hlines(0,3,10,color='k', linestyle='dashed')
+ax.vlines(3.81,-5,5,color='k', linestyle='dashed')
+
+ax.set_title('Two Particle System', fontsize=14)
+ax.set_xlabel(r'x-coordinate of particle $\mathbf{x_0}$', fontsize=14)
+ax.legend(fontsize=14)
+
+ax.set_ylim(-5,5)
+
+plt.show()
+
+
+#Do the same thing for four particles
+
+#Four particle potential
+def Gradient_pot_fourparticle(x):
+
+	#coordinates for the particles
+	x0 = np.array([x,0,0])
+	x1 = np.array([0,0,0])
+	x2 = np.array([14,0,0])
+	x3 = np.array([7,3.2,0])
+
+	# Calculate potential
+	points = np.stack((x0,x1,x2,x3))
+	gradV = gradV_func( points )
+
+	return gradV
+
+x_arr = np.linspace(3,10,1000) #x is in the interval [3:10]
+
+#Create empty arrays for the gradient in all directions
+gradx_arr = np.zeros_like(x_arr)
+grady_arr = np.zeros_like(x_arr)
+gradz_arr = np.zeros_like(x_arr)
+
+
+for x, i in zip(x_arr, np.arange(len(x_arr))): 
+
+	grad = Gradient_pot_twoparticles(x)
+
+	if i == 0:
+        	print(grad)
+
+	gradx_arr[i], grady_arr[i], gradz_arr[i] = grad[0]
+
+# Potenial needs to be in the same interval
+pot_arr = np.zeros_like(x_arr) 
+
+# Calculate potential for each x
+for x, i in zip(x_arr, np.arange(len(x_arr))):
+	potential = Pot_four_particles(x)
+	pot_arr[i] = potential
+
+fig, ax = plt.subplots(figsize=(8,6))
+ax.plot(x_arr, gradx_arr, '-', label='gradient')
+ax.plot(x_arr,pot_arr,'-',label='potential')
+ax.hlines(0,3,10,color='k', linestyle='dashed')
+ax.set_ylim(-5,5)
+ax.legend(fontsize=14)
+ax.set_title('Four Particle System', fontsize=14)
+ax.set_xlabel(r'x-coordinate of particle $\mathbf{x_0}$', fontsize=14)
+
+plt.show()
+
+"QF_____________________________________________________________"
+
+
+
+
+"QG_____________________________________________________________"
+
+
+
+"QH_____________________________________________________________"
+
+
+
+
+
+"QI_____________________________________________________________"
+
+
+
+
+"QJ_____________________________________________________________"
+
+
+
+
+"QF_____________________________________________________________"
