@@ -5,7 +5,7 @@ from LJhelperfunctions import *
 import timeit
 import time
 
-"QA_____________________________________________________________"
+#*"QA_____________________________________________________________"
 
 V_function = LJ(sigma=SIGMA, epsilon=EPSILON)
 
@@ -61,7 +61,7 @@ ax.set_title('Lennard-Jones Potential', fontsize=18)
 ax.legend(fontsize=15)
 plt.show()
 
-"QB_____________________________________________________________"
+#*"QB_____________________________________________________________"
 
 def Bisection(f, a, b, tol = 1e-13):
 	a, b = min(a,b), max(a,b)
@@ -91,7 +91,7 @@ x, n_calls = Bisection(Pot_two_particles, 2, 6)
 
 print(f'The root was found to be {x}, with {n_calls} calls. Sigma is {SIGMA}')
 
-"QC_____________________________________________________________"
+#*"QC_____________________________________________________________"
 
 def dPot_two_particles(r):
 	y = 4*EPSILON*((6*SIGMA**6)/r**7 - (12*SIGMA**12)/r**13)
@@ -122,7 +122,7 @@ x,n_calls = Newton_solver1(Pot_two_particles, dPot_two_particles, 2, tol = 1e-12
 
 print(f'The root was found to be {x}, with {n_calls} calls. Sigma is {SIGMA}')
 
-"QD_____________________________________________________________"
+#*"QD_____________________________________________________________"
 
 def Bisection_step(f, a, b, n_calls):
 
@@ -197,7 +197,7 @@ x, n_calls = Frankenstein_root_finder(Pot_two_particles, dPot_two_particles, 2, 
 print(f'The root was found to be {x} with {n_calls} calls. Sigma is {SIGMA}')
 
 
-"QE_____________________________________________________________"
+#*"QE_____________________________________________________________"
 
 #Get the gradient potential function with the experimental values of argon
 gradient_pot_func = LJgradient(sigma =SIGMA, epsilon = EPSILON)
@@ -227,7 +227,7 @@ for x, i in zip(x_arr, np.arange(len(x_arr))):
 	grad = Gradient_pot_twoparticles(x)
 
 	if i == 0:
-        	print(grad)
+		print(grad)
 	
 	gradx_arr[i], grady_arr[i], gradz_arr[i] = grad[0]
 
@@ -290,7 +290,7 @@ for x, i in zip(x_arr, np.arange(len(x_arr))):
 	grad = Gradient_pot_twoparticles(x)
 
 	if i == 0:
-        	print(grad)
+		print(grad)
 
 	gradx_arr[i], grady_arr[i], gradz_arr[i] = grad[0]
 
@@ -313,7 +313,7 @@ ax.set_xlabel(r'x-coordinate of particle $\mathbf{x_0}$', fontsize=14)
 
 plt.show()
 
-"QF_____________________________________________________________"
+#*"QF_____________________________________________________________"
 
 #The same old bisection solver for finding roots
 
@@ -377,7 +377,7 @@ def Line_search(F, x0, d, a, b, tol):
 
 	return alpha, n_calls
 
-### Test ###
+#*## Test ###
 
 #Initial guess
 x0 = np.array([[4,0,0], [0,0,0], [14,0,0], [7,3.2,0]])
@@ -394,26 +394,27 @@ print(f'Found alpha value to be {alp} with {calls} calls to the function')
 
 
 
-"QG_____________________________________________________________"
+
+#todo"QG_____________________________________________________________"
 
 
 
 
 
-"QH_____________________________________________________________"
+#todo"QH_____________________________________________________________"
 
 
 
 
 
-"QI_____________________________________________________________"
+#todo"QI_____________________________________________________________"
 
 
 
 
-"QJ_____________________________________________________________"
+#todo"QJ_____________________________________________________________"
 
 
 
 
-"QF_____________________________________________________________"
+#todo"QF_____________________________________________________________"
