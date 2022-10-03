@@ -273,7 +273,7 @@ def Gradient_pot_fourparticle(x):
 
 	# Calculate potential
 	points = np.stack((x0,x1,x2,x3))
-	gradV = gradV_func( points )
+	gradV = gradient_pot_func( points )
 
 	return gradV
 
@@ -315,10 +315,88 @@ plt.show()
 
 "QF_____________________________________________________________"
 
+#The same old bisection solver for finding roots
+
+def Flat_Bisection(f, a, b, tol = 1e-13):
+	a, b = min(a,b), max(a,b)
+	fa = f(a)
+	fb = f(b)
+	if fa/abs(fa) == fb/abs(fb):
+		return None
+
+	n_calls = 2 
+
+	while b-a > tol:
+		m = a + (b-a)/ 2
+		fa = f(a)
+		fm = f(m)
+		sfa = fa/abs(fa)
+		fsm = fm/abs(fm)
+		if sfa == fsm:
+			a = m
+		else:
+			b = m
+
+		n_calls += 1
+
+	return m, n_calls
+
+#Defines a line segment and finds the function for a given line section
+def Line_function(f, x0, d):
+
+	def f_restriction(alpha):
+
+		Line_segment = x0 + alpha * d
+
+		return f(Line_segment)
+		
+	return f_restriction
+
+#Calculates the directional derivative of f(x0 + alpha * d) by doing matrix multiplication
+#With d and F  
+def Directional_derivative_line(f, x0, d):
+	f_gradient = Line_function(f, x0, d)
+
+	def Directional_derivative(alpha):
+		return d @ f_gradient(alpha)
+
+	return Directional_derivative
+
+#Finds the root of a given line segment using the above functions
+def Line_search(F, x0, d, a, b, tol):
+
+	#We need to flatten because we are working in 1D and because both
+	#d and x0 are represented in 2D
+	x0_flat = x0.flatten()
+	d_flat = d.flatten()
+
+	directional_derive_func = Directional_derivative_line(F, x0_flat, d_flat)
+
+
+	alpha, n_calls = Flat_Bisection(directional_derive_func, a, b, tol = tol)
+
+	return alpha, n_calls
+
+### Test ###
+
+#Initial guess
+x0 = np.array([[4,0,0], [0,0,0], [14,0,0], [7,3.2,0]])
+
+#Direction
+d = -gradient_pot_func(x0)
+
+#The interval of alpha
+a, b = 0,1
+
+#flat_gradV is given in the LJhelperfunctions.py
+alp, calls = Line_search(flat_gradV, x0, d, a, b, tol = 1e-13)
+print(f'Found alpha value to be {alp} with {calls} calls to the function')
 
 
 
 "QG_____________________________________________________________"
+
+
 
 
 
