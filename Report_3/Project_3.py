@@ -55,8 +55,8 @@ for x, i in zip(x_arr, np.arange(len(x_arr))):
 
 # Plot it
 fig, ax = plt.subplots(figsize=(12,6))
-ax.plot(x_arr, V2_arr, 'C0o--', label='Two particles')
-ax.plot(x_arr, V4_arr, 'C1o--', label='Four particles')
+ax.plot(x_arr, V2_arr, '-o', label='Two particles')
+ax.plot(x_arr, V4_arr, '-o', label='Four particles')
 ax.set_xlabel(r'$x$', fontsize=15)
 ax.set_ylabel(r'$V_{LJ}$', fontsize=15)
 ax.set_title('Lennard-Jones Potential', fontsize=18)
@@ -611,7 +611,7 @@ def BFGS_line_seach(f, gradf, x0, tol = 1e-6, max_iter = 10000):
 
 
 		#STEP 2: Calculate the new position
-		x_new = x + alpha + p # Introduce alpha into the calculation of the new position
+		x_new = x + alpha * p # Introduce alpha into the calculation of the new position
 
 		#STEP 2.5: Get the displacement
 		s = x_new - x 
