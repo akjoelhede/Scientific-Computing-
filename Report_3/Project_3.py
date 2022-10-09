@@ -1,3 +1,4 @@
+# %%
 import numpy as np
 import matplotlib.pyplot as plt
 import sympy as sp
@@ -5,6 +6,7 @@ from LJhelperfunctions import *
 import timeit
 import time
 
+# %%
 #*"QA_____________________________________________________________"
 
 V_function = LJ(sigma=SIGMA, epsilon=EPSILON)
@@ -61,6 +63,7 @@ ax.set_title('Lennard-Jones Potential', fontsize=18)
 ax.legend(fontsize=15)
 plt.show()
 
+# %%
 #*"QB_____________________________________________________________"
 
 def Bisection(f, a, b, tol = 1e-13):
@@ -91,6 +94,7 @@ x, n_calls = Bisection(Pot_two_particles, 2, 6)
 
 print(f'The root was found to be {x}, with {n_calls} calls. Sigma is {SIGMA}')
 
+# %%
 #*"QC_____________________________________________________________"
 
 def dPot_two_particles(r):
@@ -122,6 +126,7 @@ x,n_calls = Newton_solver1(Pot_two_particles, dPot_two_particles, 2, tol = 1e-12
 
 print(f'The root was found to be {x}, with {n_calls} calls. Sigma is {SIGMA}')
 
+# %%
 #*"QD_____________________________________________________________"
 
 def Bisection_step(f, a, b, n_calls):
@@ -155,7 +160,7 @@ def Frankenstein_root_finder(f, df , x0, a, b, tol):
 	while abs(fm) > tol:
 
 		dfm = df(m)
-		n_calls += 100
+		n_calls += 1
 
 		if dfm == 0:
 			a, b, n_calls = Bisection_step(f, a, b, n_calls)
@@ -196,7 +201,7 @@ x, n_calls = Frankenstein_root_finder(Pot_two_particles, dPot_two_particles, 2, 
 # Print results
 print(f'The root was found to be {x} with {n_calls} calls. Sigma is {SIGMA}')
 
-
+# %%
 #*"QE_____________________________________________________________"
 
 #Get the gradient potential function with the experimental values of argon
@@ -313,6 +318,7 @@ ax.set_xlabel(r'x-coordinate of particle $\mathbf{x_0}$', fontsize=14)
 
 plt.show()
 
+# %%
 #*"QF_____________________________________________________________"
 
 #The same old bisection solver for finding roots
@@ -392,29 +398,297 @@ a, b = 0,1
 alp, calls = Line_search(flat_gradV, x0, d, a, b, tol = 1e-13)
 print(f'Found alpha value to be {alp} with {calls} calls to the function')
 
+# %%
+#*"QG_____________________________________________________________"
+
+def golden_section(f, a, b, tol = 1e-3):
+
+	#Golden ration ish 
+	tau = (np.sqrt(5)-1)/2
+
+	#We need to compute the initial points x1 and x2 within the interval of [a,b] from tau
+	x1 = a + (1-tau)*(b-a)
+	f1 = f(x1)
+
+	x2 = a + tau*(b-a)
+	f2 = f(x2)
+
+	#Start of counter
+	n_calls = 2
+
+	#* MAIN FUNCTION
+
+	while abs(b-a) > tol:
+
+		#CHECK which subinterval contains the minima and discard the other
+
+		#RIGHT interval
+		if f1 > f2:
+
+			#Shorten interval
+			a = x1
+
+			#Change midpoints
+			x1 = x2
+			f1 = f2
+
+			#Then find x2 from tau
+			x2 = a + tau*(b-a)
+			f2 = f(x2)
+
+		# else LEFT interval
+		else:
+
+			#Shorten interval
+			b = x2
+
+			#Change midpoints
+			x2 = x1
+			f2 = f1
+
+			#Calculate x1 from tau
+			x1 = a + (1-tau)*(b-a)
+			f1 = f(x1)
+
+		n_calls += 1
+
+		x_optimized = a + (b-a) / 255
+
+	return x_optimized, n_calls
+
+#We can then test this on f) to see if we obtain the same alpha
+
+f = Line_function(f = flat_V, x0 = x0.flatten(), d = -gradient_pot_func(x0).flatten())
+
+alpha, n_calls = golden_section(f, 0, 1)
+
+print(f'The minima found with the golden section function is {alpha} with {n_calls} calls')
+
+# Next we use this to find the distance between two argon atoms
+
+r, n_calls = golden_section(Pot_two_particles, 2, 6)
+
+print(f'The distance between the two atoms is {r}, with {n_calls} calls')
+
+# %%
+#*QH_____________________________________________________________"
+
+def BFGS(f, gradf, x0, tol = 1e-6, max_iter = 10000):
+
+	#Initial Guess
+	x = x0
+
+	#Identity matrix
+	I = np.eye(len(x0))
+
+	#Initial hessian approximation
+	B_inv = I
+
+	#initial gradient
+	y = gradf(x)
+
+	n_calls = 1
+
+	#This status is kept until max_iter is hit, then change to false
+	converged = True
+
+	#*MAIN function 
+
+	while np.linalg.norm(y) > tol and n_calls < max_iter:
+
+		#STEP 1: obtain a direction 
+		p = - np.dot(B_inv,y)
+
+		#STEP 2: Calculate the new position
+		x_new = x + p
+
+		#STEP 3: Calculate the new gradient
+		y_new = gradf(x_new)
+
+		dy = y_new - y 
+
+		n_calls += 1
+
+		#STEP 4: Get new inverse Hession matrix
+
+		#Make calculation more manageable
+		bfgs_1 = I - (p[:, np.newaxis] * dy[np.newaxis, :])/(np.dot(dy, p))
+		bfgs_2 = I - (dy[:, np.newaxis] * p[np.newaxis, :])/(np.dot(dy, p))
+
+		#Calculate the new Inverse hessian matrix
+		B_inv_new = np.dot(bfgs_1, np.dot(B_inv, bfgs_2)) + (p[:, np.newaxis] * p[np.newaxis, :])/(np.dot(dy, p))
+
+		#FINAL STEP: Update B_inv, x, y
+		B_inv, x, y = B_inv_new, x_new, y_new
+
+	#Update convergence 
+	if n_calls >= max_iter:
+		converged = False
+
+	#Optimized x value
+	x_opt = x 
+
+	return x_opt, n_calls, converged
+
+# load data
+data = np.load("ArStart.npz")
+X_start2 = data["Xstart2"]
+
+#find positions
+x, n_calls, conv = BFGS(flat_V,flat_gradV, X_start2, tol = 1e-6, max_iter=100)
+positions = x.reshape(2, -3)
+print(f'Minimum found to be at x0 = {positions[0]} and x1 = {positions[1]} with {n_calls} calls to the function, convergence = {conv}')
+
+#Find distance
+distances = distance(positions)
+print(f'The distance is found to be {distances[0,1]}')
+
+#%%
+#*"QI_____________________________________________________________"
+
+names =['Xstart2', 'Xstart3', 'Xstart4', 'Xstart5', 'Xstart6', 'Xstart7', 'Xstart8', 'Xstart9']
+
+r = 3.817
+
+fig, ax = plt.subplots(ncols = 4, nrows = 2, figsize = (15,8), subplot_kw=dict(projection='3d'))
+ax = ax.flatten()
+
+for i in range(len(names)):
+
+	X_start = data[names[i]]
+
+	N = i + 2
+
+	x, n_calls, conv = BFGS(flat_V, flat_gradV, X_start, tol = 1e-10)
+	positions = x.reshape(N, -3)
+
+	print(f'For {i+1} particles the function was called {n_calls} times. Convergence = {conv}')
+
+
+	if conv == True:
+		distances = distance(positions)
+
+		one_percent = sum(abs(distances-r)/r <= 0.01)
+
+		print(f'For {N} particles, {one_percent} were within 1% of the two particle optimum {r}')
+
+		ax[i].scatter(positions[:,0], positions[:,1], positions[:,2], color = 'b')
+		ax[i].set_title(f'{i+2} Particles')
+# %%
+#*"QJ_____________________________________________________________"
+
+def BFGS_line_seach(f, gradf, x0, tol = 1e-6, max_iter = 10000):
+
+	#Initial Guess
+	x = x0
+
+	#Identity matrix
+	I = np.eye(len(x0))
+
+	#Initial hessian approximation
+	B_inv = I
+
+	#initial gradient
+	y = gradf(x)
+
+	n_calls = 1
+
+	#This status is kept until max_iter is hit, then change to false
+	converged = True
+
+	#*MAIN function 
+
+	while np.linalg.norm(y) > tol and n_calls < max_iter:
+
+		#STEP 1: obtain a direction 
+		p = - np.dot(B_inv,y)
+
+
+		#STEP 1.5: Implement line search
+		f_1D = Line_function(f, x, p) #Get the function of a line segment
+		alpha, n_calls_extra = golden_section(f_1D, -1, 1, tol=1e-6) #Put that funtion into the golden section search to estimate alpha
+		n_calls += n_calls_extra # Add the extra calls to our calls
+
+
+		#STEP 2: Calculate the new position
+		x_new = x + alpha + p # Introduce alpha into the calculation of the new position
+
+		#STEP 2.5: Get the displacement
+		s = x_new - x 
+
+		#STEP 3: Calculate the new gradient
+		y_new = gradf(x_new)
+
+		dy = y_new - y 
+
+		n_calls += 1
+
+		#STEP 4: Get new inverse Hession matrix
+
+		#Make calculation more manageable
+		bfgs_1 = I - (s[:, np.newaxis] * dy[np.newaxis, :])/(np.dot(dy, s))
+		bfgs_2 = I - (dy[:, np.newaxis] * s[np.newaxis, :])/(np.dot(dy, s))
+
+		#Calculate the new Inverse hessian matrix
+		B_inv_new = np.dot(bfgs_1, np.dot(B_inv, bfgs_2)) + (s[:, np.newaxis] * s[np.newaxis, :])/(np.dot(dy, s))
+
+		#FINAL STEP: Update B_inv, x, y
+		B_inv, x, y = B_inv_new, x_new, y_new
+
+	#Update convergence 
+	if n_calls >= max_iter:
+		converged = False
+
+	#Optimized x value
+	x_opt = x 
+
+	return x_opt, n_calls, converged
+
+# load data
+data = np.load("ArStart.npz")
+X_start2 = data["Xstart2"]
+
+#find positions
+x, n_calls, conv = BFGS_line_seach(flat_V, flat_gradV, X_start2, tol = 1e-6, max_iter=100)
+positions = x.reshape(2, -3)
+print(f'Minimum found to be at x0 = {positions[0]} and x1 = {positions[1]} with {n_calls} calls to the function, convergence = {conv}')
+
+#Find distance
+distances = distance(positions)
+print(f'The distance is found to be {distances[0,1]}')
+
+#* CALCULATE AND PLOT
+
+names =['Xstart2', 'Xstart3', 'Xstart4', 'Xstart5', 'Xstart6', 'Xstart7', 'Xstart8', 'Xstart9']
+
+r = 3.817
+
+fig, ax = plt.subplots(ncols = 4, nrows = 2, figsize = (15,8), subplot_kw=dict(projection='3d'))
+ax = ax.flatten()
+
+for i in range(len(names)):
+
+	X_start = data[names[i]]
+
+	N = i + 2
+
+	x, n_calls, conv = BFGS_line_seach(flat_V, flat_gradV, X_start, tol = 1e-10)
+	positions = x.reshape(N, -3)
+
+	print(f'For {i+1} particles the function was called {n_calls} times. Convergence = {conv}')
+
+	if conv == True:
+		distances = distance(positions)
+
+		one_percent = sum(abs(distances-r)/r <= 0.01)
+
+		print(f'For {N} particles, {one_percent} were within 1% of the two particle optimum {r}')
+
+		ax[i].scatter(positions[:,0], positions[:,1], positions[:,2], color = 'b')
+		ax[i].set_title(f'{i+2} Particles')
+
+#todo"QK_____________________________________________________________"
 
 
 
-#todo"QG_____________________________________________________________"
-
-
-
-
-
-#todo"QH_____________________________________________________________"
-
-
-
-
-
-#todo"QI_____________________________________________________________"
-
-
-
-
-#todo"QJ_____________________________________________________________"
-
-
-
-
-#todo"QF_____________________________________________________________"
+# %%
