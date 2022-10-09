@@ -452,7 +452,7 @@ def golden_section(f, a, b, tol = 1e-3):
 
 		n_calls += 1
 
-		x_optimized = a + (b-a) / 255
+		x_optimized = a + (b-a) / 2
 
 	return x_optimized, n_calls
 
@@ -672,7 +672,7 @@ for i in range(len(names)):
 
 	N = i + 2
 
-	x, n_calls, conv = BFGS_line_seach(flat_V, flat_gradV, X_start, tol = 1e-10)
+	x, n_calls, conv = BFGS_line_seach(flat_V, flat_gradV, X_start, tol = 1e-5, max_iter = 100000)
 	positions = x.reshape(N, -3)
 
 	print(f'For {i+1} particles the function was called {n_calls} times. Convergence = {conv}')
