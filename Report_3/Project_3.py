@@ -55,8 +55,8 @@ for x, i in zip(x_arr, np.arange(len(x_arr))):
 
 # Plot it
 fig, ax = plt.subplots(figsize=(12,6))
-ax.plot(x_arr, V2_arr, '-o', label='Two particles')
-ax.plot(x_arr, V4_arr, '-o', label='Four particles')
+ax.plot(x_arr, V2_arr, '-o', label='Two particles', color = 'b')
+ax.plot(x_arr, V4_arr, '-o', label='Four particles', color = 'r')
 ax.set_xlabel(r'$x$', fontsize=15)
 ax.set_ylabel(r'$V_{LJ}$', fontsize=15)
 ax.set_title('Lennard-Jones Potential', fontsize=18)
@@ -249,12 +249,12 @@ for x, i in zip(x_arr, np.arange(len(x_arr))):
 fig, ax = plt.subplots(figsize=(8,6))
 
 # Plot the gradient
-ax.plot(x_arr, gradx_arr, '-', label='Gradient')
+ax.plot(x_arr, gradx_arr, '-', label='Gradient', color = 'b')
 
 # Plot the potential 
-ax.plot(x_arr,pot_arr,'-',label='LJ Potential')
-ax.hlines(0,3,10,color='k', linestyle='dashed')
-ax.vlines(3.81,-5,5,color='k', linestyle='dashed')
+ax.plot(x_arr,pot_arr,'-',label='LJ Potential', color = 'r')
+ax.hlines(0,3,10,color='k')
+
 
 ax.set_title('Two Particle System', fontsize=14)
 ax.set_xlabel(r'x-coordinate of particle $\mathbf{x_0}$', fontsize=14)
@@ -292,7 +292,7 @@ gradz_arr = np.zeros_like(x_arr)
 
 for x, i in zip(x_arr, np.arange(len(x_arr))): 
 
-	grad = Gradient_pot_twoparticles(x)
+	grad = Gradient_pot_fourparticle(x)
 
 	if i == 0:
 		print(grad)
@@ -308,9 +308,9 @@ for x, i in zip(x_arr, np.arange(len(x_arr))):
 	pot_arr[i] = potential
 
 fig, ax = plt.subplots(figsize=(8,6))
-ax.plot(x_arr, gradx_arr, '-', label='gradient')
-ax.plot(x_arr,pot_arr,'-',label='potential')
-ax.hlines(0,3,10,color='k', linestyle='dashed')
+ax.plot(x_arr, gradx_arr, '-', label='gradient', color = 'b')
+ax.plot(x_arr,pot_arr,'-',label='potential', color = 'r')
+ax.hlines(0,3,10,color='k')
 ax.set_ylim(-5,5)
 ax.legend(fontsize=14)
 ax.set_title('Four Particle System', fontsize=14)
