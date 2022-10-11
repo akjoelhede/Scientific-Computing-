@@ -3,8 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import sympy as sp
 from LJhelperfunctions import *
-import timeit
-import time
+
 
 # %%
 #*"QA_____________________________________________________________"
@@ -561,8 +560,6 @@ for i in range(len(names)):
 
 	x, n_calls, conv = BFGS(flat_V, flat_gradV, X_start, tol = 1e-10)
 	positions = x.reshape(N, -3)
-
-	print(f'For {i+1} particles the function was called {n_calls} times. Convergence = {conv}')
 
 
 	if conv == True:
