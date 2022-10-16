@@ -28,7 +28,7 @@ class HIV():
 
 		next = np.array([diffx1, diffx2, diffy, diffz])
 
-		return diffx1, diffx2, diffy, diffz
+		return next
 
 	
 	def euler(self, Var, diff, dt):
@@ -36,17 +36,6 @@ class HIV():
 		euler_step = Var + diff * dt
 
 		return euler_step
-
-	def runge_kutta(self, Var, parameters, dt):
-
-		k1 = Diff(self, Var, parameters)
-		k2 = Diff(self, Var + (dt/2)*k1, parameters)
-		k3 = Diff(self, Var + (dt)*k2, parameters)
-		k4 = Diff(self, Var + dt*k3, parameters)
-
-		new_X = Var + (dt/ 6 ) * (k1 + 2*k2 + 2*k3  +k4)
-
-		return new_X
 
 dt = 1
 
@@ -85,14 +74,10 @@ diff = s.Diff(Var, parameters)
 
 euler_store = []
 #CALL TO EULER FUNCITON
-for i in range(100):
-	euler = s.euler(Var, diff, dt)
+for i in range(10):
+	euler = s.euler(i, diff, dt)
 	euler_store.append(euler)
 print(euler_store)
-#CALL TO RUNGE-KUTTA FUNTION
-Runge_Kutta = s.runge_kutta(Var, parameters, dt)
-
-
 
 
 
