@@ -30,14 +30,7 @@ class HIV():
 
 		return next
 
-	
-	def euler(self, Var, diff, dt):
-
-		euler_step = Var + diff * dt
-
-		return euler_step
-
-dt = 1
+dt = 0.01
 
 x1 = 0.01
 x2 = 0
@@ -62,22 +55,28 @@ r2 = 0
 r3 = 0 
 r4 = 0
 
-Var = np.array([x1, x2, y, z])
+var = np.array([x1, x2, y, z])
 
 parameters = np.array([a1, a2, b1, b2, b3, c1, c2, d1, p1, p2, r, q, e, r1, r2, r3, r4])
 
 #THIS CALLS THE CLASS
-s = HIV(Var = Var, parameters=parameters)
+s = HIV(Var = var, parameters=parameters)
 
 #CALL TO DIFF FUNCTION
-diff = s.Diff(Var, parameters)
+def euler(Var, parameters, dt):
 
-euler_store = []
-#CALL TO EULER FUNCITON
-for i in range(10):
-	euler = s.euler(i, diff, dt)
-	euler_store.append(euler)
-print(euler_store)
+	diff = s.Diff(Var, parameters)
+
+	euler_step = Var + diff * dt
+
+	return euler_step
+
+
+euler_store = [var]
+for i in range(100):
+	new_step = euler(euler_store[-1], parameters, dt)
+	euler_store.append(new_step)
+print(euler_store[:,0])
 
 
 
