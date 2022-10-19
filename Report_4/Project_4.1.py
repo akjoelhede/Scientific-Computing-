@@ -1,35 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-
-#A CLASS DOES NOT TAKE ANY PARAMETERS OR VALUES
-class HIV():
-
-	def __init__(self, Var, parameters ): # THE __INIT__ FUNCTION DEFINES THE PARAMETERS IN THE CLASS
-		self.parameters = parameters
-		self.Var = Var
-
-		
-	#ALL FUNCTIONS BELOW THIS ARE CALLABLE 
-
-	def Diff(self, Var, parameters):
-
-		x1, x2, y, z = Var
-		
-		a1, a2, b1, b2, b3, c1, c2, d1, p1, p2, r, q, e, r1, r2, r3, r4 = parameters
-
-		diffx1 = a1*x1*(p1-x1)+ a2*x2*(p1-x1) + e*(p1-x1) - r1*x1
-
-		diffx2 = b1*x1*(p2-x2)+b2*x2*(p2-x2) + b3*y*(p2-x2) + e*(p2-x2)- r2*x2
-
-		diffy = c1*x2*(q-y) + c2*z*(q-y) + e*(q-y) - r3*y
-
-		diffz = d1*y*(r-z) + e*(r-z) - r4*z
-
-		next = np.array([diffx1, diffx2, diffy, diffz])
-
-		return next
-
 dt = 0.01
 
 x1 = 0.01
@@ -59,24 +30,51 @@ var = np.array([x1, x2, y, z])
 
 parameters = np.array([a1, a2, b1, b2, b3, c1, c2, d1, p1, p2, r, q, e, r1, r2, r3, r4])
 
-#THIS CALLS THE CLASS
-s = HIV(Var = var, parameters=parameters)
+def Diff(Var, parameters):
+
+	x1, x2, y, z = Var
+		
+	a1, a2, b1, b2, b3, c1, c2, d1, p1, p2, r, q, e, r1, r2, r3, r4 = parameters
+
+	diffx1 = a1*x1*(p1-x1)+ a2*x2*(p1-x1) + e*(p1-x1) - r1*x1
+
+	diffx2 = b1*x1*(p2-x2)+b2*x2*(p2-x2) + b3*y*(p2-x2) + e*(p2-x2)- r2*x2
+
+	diffy = c1*x2*(q-y) + c2*z*(q-y) + e*(q-y) - r3*y
+
+	diffz = d1*y*(r-z) + e*(r-z) - r4*z
+
+	next = np.array([diffx1, diffx2, diffy, diffz])
+
+	return next
+
+
 
 #CALL TO DIFF FUNCTION
 def euler(Var, parameters, dt):
 
-	diff = s.Diff(Var, parameters)
+	diff = Diff(Var, parameters)
 
 	euler_step = Var + diff * dt
 
 	return euler_step
 
-
 euler_store = [var]
 for i in range(100):
 	new_step = euler(euler_store[-1], parameters, dt)
 	euler_store.append(new_step)
-print(euler_store[:,0])
+
+
+def Runge_Kutta_step(X, params, step_size = dt):
+	#calculate k coefficients
+	k1 = Diff(X, params)
+	k2 = Diff(X + (step_size/2)*k1, params)
+	k3 = Diff(X + (step_size/2)*k2, params)
+	k4 = Diff(X + step_size*k3, params)
+
+	nextX = X + (step_size / 6 ) * (k1 + 2*k2 + 2*k3  +k4)
+	return nextX
+
 
 
 
