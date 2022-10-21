@@ -69,6 +69,8 @@ for i in range(100):
 	new_step = euler(euler_store[-1], parameters, dt)
 	euler_store.append(new_step)
 
+print(euler_store[0:5])
+
 
 def Runge_Kutta_step(X, params, step_size = dt):
 	#calculate k coefficients
