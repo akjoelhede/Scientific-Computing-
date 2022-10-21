@@ -1,3 +1,8 @@
+#Anders Terp Kjoelhede
+#Date: 21/10/2022
+#Scientific Computing
+#Project_4
+
 import numpy as np
 import matplotlib.pyplot as plt
 
