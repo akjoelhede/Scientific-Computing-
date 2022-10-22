@@ -3,24 +3,25 @@
 #Scientific Computing
 #Project_4
 
+from cProfile import label
 import numpy as np
 import matplotlib.pyplot as plt
 
-dt = 0.01
+dt = 0.001
 
 x1 = 0.01
-x2 = 0
-y = 0
-z = 0
+x2 = 0.01
+y = 1
+z = 1
 
 a1 = 10
 a2 = 5
 b1 = 5
-b2 = 0
-b3 = 0
-c1 = 0
-c2 = 0
-d1 = 0
+b2 = 1
+b3 = 1
+c1 = 1
+c2 = 1
+d1 = 1
 p1 = 5
 p2 = 5
 r = 100 
@@ -28,7 +29,7 @@ q = 100
 e = 0
 r1 = 0
 r2 = 0
-r3 = 0 
+r3 = 0
 r4 = 0
 
 var = np.array([x1, x2, y, z])
@@ -53,8 +54,6 @@ def Diff(Var, parameters):
 
 	return next
 
-
-
 #CALL TO DIFF FUNCTION
 def euler(Var, parameters, dt):
 
@@ -63,14 +62,6 @@ def euler(Var, parameters, dt):
 	euler_step = Var + diff * dt
 
 	return euler_step
-
-euler_store = [var]
-for i in range(100):
-	new_step = euler(euler_store[-1], parameters, dt)
-	euler_store.append(new_step)
-
-print(euler_store[0:5])
-
 
 def Runge_Kutta_step(X, params, step_size = dt):
 	#calculate k coefficients
@@ -82,6 +73,45 @@ def Runge_Kutta_step(X, params, step_size = dt):
 	nextX = X + (step_size / 6 ) * (k1 + 2*k2 + 2*k3  +k4)
 	return nextX
 
+euler_store = [var]
+for i in range(299):
+	new_step = euler(euler_store[-1], parameters, dt)
+	euler_store.append(new_step)
+euler_store = np.array(euler_store)
 
 
+RK_store = [var]
+for i in range(299):
+	new_step = Runge_Kutta_step(RK_store[-1], parameters, dt)
+	RK_store.append(new_step)
+RK_store = np.array(RK_store)
 
+t = np.arange(0,300*dt, dt)
+
+plt.plot(t, euler_store[:,0], label = "Homosexual males")
+plt.plot(t, euler_store[:,1], label = "Bisexual males ")
+plt.plot(t, euler_store[:,2], label = "Heterosexual females")
+plt.plot(t, euler_store[:,3], label = "Heterosexual males")
+plt.hlines(y = 5, xmin = 0, xmax = 0.3, linestyles = "dashed", color = "k", label = "x1=x2=5")
+plt.hlines(y = 100, xmin = 0, xmax = 0.3, linestyles = "dashed", color = "k", label = "p1=p2=100")
+
+plt.title("HIV infection with forward euler")
+plt.xlabel("Time")
+plt.ylabel("Number of infected")
+
+plt.legend()
+plt.show()
+
+plt.plot(t, RK_store[:,0], label = "Homosexual males")
+plt.plot(t, RK_store[:,1], label = "Bisexual males ")
+plt.plot(t, RK_store[:,2], label = "Heterosexual females")
+plt.plot(t, RK_store[:,3], label = "Heterosexual males")
+plt.hlines(y = 5, xmin = 0, xmax = 0.3, linestyles = "dashed", color = "k", label = "x1=x2=5")
+plt.hlines(y = 100, xmin = 0, xmax = 0.3, linestyles = "dashed", color = "k", label = "p1=p2=100")
+
+plt.title("HIV infection with 4th order Runge-Kutta")
+plt.xlabel("Time")
+plt.ylabel("Number of infected")
+
+plt.legend()
+plt.show()
