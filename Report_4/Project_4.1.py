@@ -3,7 +3,6 @@
 #Scientific Computing
 #Project_4
 
-from cProfile import label
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -12,7 +11,7 @@ dt = 0.001
 x1 = 0.01
 x2 = 0.01
 y = 1
-z = 1
+z = 1 
 
 a1 = 10
 a2 = 5
