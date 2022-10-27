@@ -10,7 +10,7 @@ import matplotlib.animation as animation
 from numba import njit
 
 #%%
-def ghosts(matrix):
+def sink(matrix):
 
 	matrix = matrix.copy()
 
@@ -110,8 +110,8 @@ t_freeze = [0, 5e2, 1e3, 1.5e3, 2e3, 3e3,
 
 for time in tqdm(range(int(t/dt))):
 
-	P_mat = ghosts(P_mat)
-	Q_mat = ghosts(Q_mat)
+	P_mat = sink(P_mat)
+	Q_mat = sink(Q_mat)
 
 	if time in t_freeze:
 
@@ -142,73 +142,58 @@ plt.show()
 plt.close('All')
 # %%
 
-# Parameter values
 D_p, D_q, C = 1, 8, 4.5
 K_arr = np.arange(7,13,1)
 
-# Places to store P and Q matrices
 P_list = []
 Q_list = []
 
-# Choose dx=dy - OBS: Has to be a number that ensures N is an integer
 dx = 0.5
 
-# Calculate side length of matrix with more gridspace
 N = int( 43 / dx )
 
-# Loop over K's
 for K in tqdm(K_arr):
 
-    # Create the matrices for P and Q
-    P_mat = np.zeros((N,N))
-    Q_mat = np.zeros((N,N))
+	P_mat = np.zeros((N,N))
+	Q_mat = np.zeros((N,N))
 
-    # Fill out initial values
-    low, high = int(12/dx), int(31/dx)
-    P_mat[low:high,low:high] = C + 0.1
-    Q_mat[low:high,low:high] = K/C + 0.2
-    
-    dt = 0.001
-    t = 2000
-    
-    for i in range( int(t/dt) ):
+	low, high = int(12/dx), int(31/dx)
+	P_mat[low:high,low:high] = C + 0.1
+	Q_mat[low:high,low:high] = K/C + 0.2
+
+	dt = 0.001
+	t = 2000
+
+	for i in range( int(t/dt) ):
         
-        # Update ghosts
-        P_mat = ghosts(P_mat)
-        Q_mat = ghosts(Q_mat)
-    
-        # Update state
-        P_mat, Q_mat = update(P_mat, Q_mat, dt, parameters=(D_p, D_q, C, K), step_size=dx)
-    
-    # Store the end results
-    P_list.append(P_mat)
-    Q_list.append(Q_mat)
-    
-### Plotting it ###
+		P_mat = sink(P_mat)
+		Q_mat = sink(Q_mat)
 
-# Set up figure
+		P_mat, Q_mat = update(P_mat, Q_mat, dt, parameters=(D_p, D_q, C, K), step_size=dx)
+
+		P_list.append(P_mat)
+		Q_list.append(Q_mat)
+
 fig, ax = plt.subplots(nrows=2, ncols=len(K_arr), figsize=(16,6), gridspec_kw={'wspace':0.2, 'hspace':0.03})
 
-# Finding the minimum and maximum value for the collective colorbar
 mini, maks = np.min((P_list, Q_list)), np.max((P_list, Q_list))
 
-# Plotting
 for i in range(len(K_arr)):
-    im = ax[0,i].imshow(P_list[i], cmap='plasma', vmin=mini, vmax=maks)
-    ax[0,i].set_title('P (K={}, t=2000)'.format(K_arr[i]))
-    ax[0,i].get_xaxis().set_visible(False)
-    ax[0,i].get_yaxis().set_visible(False)
-    
-    ax[1,i].imshow(Q_list[i], cmap='plasma', vmin=mini, vmax=maks)
-    ax[1,i].set_title('Q (K={}, t=2000)'.format(K_arr[i]))
-    ax[1,i].get_xaxis().set_visible(False)
-    ax[1,i].get_yaxis().set_visible(False)
+	im = ax[0,i].imshow(P_list[i], cmap='plasma', vmin=mini, vmax=maks)
+	ax[0,i].set_title('P (K={}, t=2000)'.format(K_arr[i]))
+	ax[0,i].get_xaxis().set_visible(False)
+	ax[0,i].get_yaxis().set_visible(False)
 
-# Add colorbar
+	ax[1,i].imshow(Q_list[i], cmap='plasma', vmin=mini, vmax=maks)
+	ax[1,i].set_title('Q (K={}, t=2000)'.format(K_arr[i]))
+	ax[1,i].get_xaxis().set_visible(False)
+	ax[1,i].get_yaxis().set_visible(False)
+
+
 cax = plt.axes([0.92, 0.15, 0.02, 0.7]) #[left, bottom, width, height]
 fig.colorbar(im, cax=cax)
 
-# Save fig
+
 plt.savefig('k_all.png')
 plt.show()
 # %%
