@@ -3,15 +3,17 @@
 #Scientific Computing
 #Project_4
 
+from turtle import color
 import numpy as np
 import matplotlib.pyplot as plt
 
 dt = 0.001
+dt1 = 0.01
 
-x1 = 0.01
-x2 = 0.01
-y = 1
-z = 1 
+x1 = 0.001
+x2 = 0
+y = 0
+z = 0
 
 a1 = 10
 a2 = 5
@@ -25,7 +27,7 @@ p1 = 5
 p2 = 5
 r = 100 
 q = 100 
-e = 0
+e = 0.001
 r1 = 0
 r2 = 0
 r3 = 0
@@ -93,12 +95,11 @@ plt.plot(t, euler_store[:,2], label = "Heterosexual females")
 plt.plot(t, euler_store[:,3], label = "Heterosexual males")
 plt.hlines(y = 5, xmin = 0, xmax = 0.3, linestyles = "dashed", color = "k", label = "x1=x2=5")
 plt.hlines(y = 100, xmin = 0, xmax = 0.3, linestyles = "dashed", color = "k", label = "p1=p2=100")
-
-plt.title("HIV infection with forward euler")
+plt.title("HIV infection with Forward euler")
 plt.xlabel("Time")
 plt.ylabel("Number of infected")
-
 plt.legend()
+plt.savefig("blood_transfusion_euler.pdf")
 plt.show()
 
 plt.plot(t, RK_store[:,0], label = "Homosexual males")
@@ -107,8 +108,44 @@ plt.plot(t, RK_store[:,2], label = "Heterosexual females")
 plt.plot(t, RK_store[:,3], label = "Heterosexual males")
 plt.hlines(y = 5, xmin = 0, xmax = 0.3, linestyles = "dashed", color = "k", label = "x1=x2=5")
 plt.hlines(y = 100, xmin = 0, xmax = 0.3, linestyles = "dashed", color = "k", label = "p1=p2=100")
-
 plt.title("HIV infection with 4th order Runge-Kutta")
+plt.xlabel("Time")
+plt.ylabel("Number of infected")
+plt.legend()
+plt.savefig("blood_transfusion_RK.pdf")
+plt.show()
+
+print(euler_store[-1][0], euler_store[-1][1], euler_store[-1][2], euler_store[-1][3])
+print(RK_store[-1][0], RK_store[-1][1], RK_store[-1][2], RK_store[-1][3])
+
+euler_store1 = [var]
+for i in range(299):
+	new_step1 = euler(euler_store1[-1], parameters, dt1)
+	euler_store1.append(new_step1)
+euler_store1 = np.array(euler_store1)
+
+RK_store1 = [var]
+for i in range(299):
+	new_step1 = Runge_Kutta_step(RK_store1[-1], parameters, dt1)
+	RK_store1.append(new_step1)
+RK_store1 = np.array(RK_store1)
+
+t1 = np.arange(0,300*dt1, dt1)
+
+plt.plot(t1, RK_store1[:,0], label ="4th order Runge-Kutta (dt = 0.2)", color = 'r')
+plt.plot(t1, RK_store1[:,1], color = 'r')
+plt.plot(t1, RK_store1[:,2], color = 'r')
+plt.plot(t1, RK_store1[:,3], color = 'r')
+plt.plot(t1, euler_store1[:,0], label="Forward Euler (dt = 0.2)", color = 'b')
+plt.plot(t1, euler_store1[:,1], color = 'b')
+plt.plot(t1, euler_store1[:,2], color = 'b')
+plt.plot(t1, euler_store1[:,3], color = 'b')
+plt.plot(t1, RK_store[:,0], label = "Refference Runge-Kutta (dt = 0.001)", color = 'k')
+plt.plot(t1, RK_store[:,1], color = 'k')
+plt.plot(t1, RK_store[:,2], color = 'k')
+plt.plot(t1, RK_store[:,3], color = 'k')
+
+plt.title("Comparison of simulation methods")
 plt.xlabel("Time")
 plt.ylabel("Number of infected")
 
