@@ -7,7 +7,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 import matplotlib.animation as animation
-from numba import njit
+
 
 #%%
 def sink(matrix):
@@ -24,7 +24,7 @@ def sink(matrix):
 
 	return matrix
 
-@njit
+
 def laplace(matrix, step_size = 1):
 
 	inner = matrix[1:-1, 1:-1]
@@ -46,7 +46,7 @@ D_q = 8
 C = 4.5
 K = 9
 
-@njit
+
 def update(Pmatrix, Qmatrix, dt, step_size=1, parameters=(D_p, D_q, C, K)):
 
 	#Extract parameters from outside function
